@@ -57,7 +57,7 @@
             font-size: 1.5rem;
             font-weight: 700;
             text-align: center;
-            margin: 20px 0;
+            margin: 20px 0 40px 0;
             letter-spacing: 1px;
         }
 
@@ -67,7 +67,7 @@
             font-size: 1rem;
             line-height: 1.8;
             max-width: 800px;
-            margin: 0 auto 30px auto;
+            margin: 20px auto 30px auto; /* تقليل المسافة العلوية */
         }
         
         .arabic-text {
@@ -79,7 +79,7 @@
         
         .warning-message {
             color: red;
-            margin: 25px 0;
+            margin: 20px 0; /* تقليل المسافة */
             padding: 0;
             text-align: center;
             font-size: 0.9rem;
@@ -114,7 +114,7 @@
             width: 100%;
             max-height: 200px;
             object-fit: cover;
-            margin-bottom: 15px;
+            margin: 40px 0;
         }
 
         .input-instruction {
@@ -231,8 +231,8 @@
         .link-right {
             text-align: left;
             flex: 1;
-            padding-left: 5px; /* تقليل المسافة */
-            margin-left: -40px; /* زيادة السحب نحو اليمين */
+            padding-left: 5px;
+            margin-left: -40px;
         }
 
         .links-section a {
@@ -348,59 +348,71 @@
         <div class="header-content">
             <img src="https://i.postimg.cc/zvf2c47L/image.png" alt="Website Logo" class="logo">
             <div class="breadcrumb">
-                <a href="#">Home</a> / <a href="#">Check sticker</a>
+                <a href="https://arabcomputers.com.sa/">Home</a> / <a href="https://arabcomputers.com.sa/check-sticker/">Check sticker</a>
             </div>
         </div>
 
-        <h2>Warranty sticker validation</h2>
-
-        <div class="warning-message">
-            <p class="warning-text-bold">
-                <img src="https://i.postimg.cc/66D66Vst/Warning-tag-A.png" alt="Website Banner" class="banner">
-                نحذر عملائنا الكرام من وجود ملصق ضمان مزور يحتوي على رمز إستجابة سريع يوجه المستخدمين لصفحة إلكترونية مزورة تشبه هذه الصفحة.<br>
-                تأكد دائمًا من عنوان الصفحة الصحيح:
-                <span class="warning-url">arabcombuter.com.sa/check-sticker</span>
-            </p>
-            <p class="warning-text-normal">
-                <span class="notice-title">Important Notice to Our Valued Customers:</span>
-                We would like to alert you to the presence of counterfeit warranty stickers featuring a QR code that directs users to a fraudulent website designed to imitate the official Arab Computers website.<br>
-                <br>
-            </p>
-        </div>
+            <h2>Warranty sticker validation</h2>
 
         <p class="main-description">
-            Check if the warranty sticker on your product is genuine and protect yourself from fake sticker.<br>
-            <span class="arabic-text">تأكد إذا كان ملصق الضمان الموجود على منتجك هو ملصق أصلي أو مزيف</span>
+            Check if the warranty sticker on your product is genuine.<br>
+            تأكد إذا كان ملصق الضمان الموجود على منتجك هو ملصق أصلي أو مزيف
+          </p>
+ 
+            <span class="arabic-text">الشكل القديم </span>
+     
         </p>
 
         <img src="https://i.postimg.cc/1XhL17mC/Screenshot-20251026-022901.jpg" alt="Website Banner" class="banner">
+<p class="main-description">
+        <span class="arabic-text">الشكل الجديد</span>
+     
+        </p>
 
+        <img src="https://i.ibb.co/3m3r1TWK/Warranty-sticker-26.jpg" alt="Website Banner" class="banner">
+        
         <p class="input-instruction">
             Enter the number shown on the sticker in this box<br>
-            أدخل الرقم الموجود على الملصق هنا    
+            أدخل الرقم الموجود على الملصق هنا   
         </p>
+
 
         <div class="input-container">
             <input type="text" id="numberInput" placeholder="XXXXXX">
             <button type="submit" onclick="validateForm(event)">Check</button>
+       
+            <button type="submit" onclick="validateForm(event)">Check</button>
         </div>
 
+        <!-- The result div is now here, right after the input container -->
         <div id="result"></div>
-    </div>
 
+        <div class="warning-message">
+            <p class="warning-text-bold">
+                نحذر عملائنا الكرام من وجود ملصق ضمان مزور يحتوي على رمز إستجابة سريع يوجه المستخدمين لصفحة إلكترونية مزورة تشبه هذه الصفحة.<br>
+                يجب أن يكون عنوان الصفحة يتبع لعنوان موقعنا الرسمي:
+                <span class="warning-url"><a href="https://arabcomputers.com.sa/" style="color: #000000; text-decoration: none;">arabcomputers.com.sa/</a></span>
+            </p>
+            <p class="warning-text-normal">
+                <span class="notice-title">Important Notice to Our Valued Customers:</span>
+                 We would like to alert you to the presence of counterfeit warranty stickers featuring a QR code that directs users to a fraudulent website designed to imitate the official Arab Computers website.<br>
+            </p>
+        </div>
+    </div>
+    
     <div class="bottom-buttons">
         <button class="menu-button">☰</button>
-        <button class="home-button">
+        <button class="home-button" onclick="window.location.href='https://arabcomputers.com.sa/'">
             <svg class="home-icon" viewBox="0 0 24 24">
                 <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" fill="none" stroke="currentColor" stroke-width="2"/>
             </svg>
         </button>
-    </div>
+    </div>  
 
     <div class="links">
         <div class="left-section">
             <div>
-                <img src="https://i.postimg.cc/SKC7Wqhm/Screenshot-com-android-chrome.png" alt="بانر الموقع" class="banner">
+                <img src="https://i.postimg.cc/SKC7Wqhm/Screenshot-com-android-chrome.png" alt="بانر الموقع" class="banner" style="margin-bottom: 20px;"> <!-- إضافة مسافة تحت الصورة -->
             </div>
         </div>
 
@@ -409,15 +421,15 @@
             <h2>Useful Links</h2>
             <div class="links-grid">
                 <div class="link-row">
-                    <div class="link-left"><a href="#">Home</a></div>
-                    <div class="link-right"><strong>DPP</strong></div>
+                    <div class="link-left"><a href="https://arabcomputers.com.sa/">Home</a></div>
+                    <div class="link-right"><strong><a href="https://arabcomputers.com.sa/dpp/" style="color: #333; text-decoration: none;">DPP</a></strong></div>
                 </div>
                 <div class="link-row">
-                    <div class="link-left"><a href="#">Point Of Sales</a></div>
+                    <div class="link-left"><a href="https://arabcomputers.com.sa/point-of-sales/">Point Of Sales</a></div>
                     <div class="link-right"></div>
                 </div>
                 <div class="link-row">
-                    <div class="link-left"><a href="#">Contact Us</a></div>
+                    <div class="link-left"><a href="https://arabcomputers.com.sa/contact/">Contact Us</a></div>
                     <div class="link-right"></div>
                 </div>
             </div>
@@ -428,16 +440,16 @@
             <h2>Products</h2>
             <div class="links-grid">
                 <div class="link-row">
-                    <div class="link-left"><a href="#">iPhone</a></div>
-                    <div class="link-right"><a href="#">iPad</a></div>
+                    <div class="link-left"><a href="https://arabcomputers.com.sa/product-category/iphone/">iPhone</a></div>
+                    <div class="link-right"><a href="https://arabcomputers.com.sa/product-category/ipad/">iPad</a></div>
                 </div>
                 <div class="link-row">
-                    <div class="link-left"><a href="#">Mac</a></div>
-                    <div class="link-right"><a href="#">Apple TV</a></div>
+                    <div class="link-left"><a href="https://arabcomputers.com.sa/product-category/mac/">Mac</a></div>
+                    <div class="link-right"><a href="https://arabcomputers.com.sa/product-category/apple-tv/">Apple TV</a></div>
                 </div>
                 <div class="link-row">
-                    <div class="link-left"><a href="#">iPod</a></div>
-                    <div class="link-right"><a href="#">Apple Watch</a></div>
+                    <div class="link-left"><a href="https://arabcomputers.com.sa/product-category/ipod/">iPod</a></div>
+                    <div class="link-right"><a href="https://arabcomputers.com.sa/product-category/apple-watch/">Apple Watch</a></div>
                 </div>
             </div>
         </div>
@@ -447,12 +459,12 @@
             <h2>Information</h2>
             <div class="links-grid">
                 <div class="link-row">
-                    <div class="link-left"><a href="#">Learn How</a></div>
-                    <div class="link-right"><a href="#">Terms and condition</a></div>
+                    <div class="link-left"><a href="https://arabcomputers.com.sa/apple-authorised-service-provider/">Learn How</a></div>
+                    <div class="link-right"><a href="https://arabcomputers.com.sa/terms-and-conditions/">Terms and condition</a></div>
                 </div>
                 <div class="link-row">
-                    <div class="link-left"><a href="#">Service Providers</a></div>
-                    <div class="link-right"><a href="#">Condition</a></div>
+                    <div class="link-left"><a href="https://arabcomputers.com.sa/apple-authorised-service-provider/">Service Providers</a></div>
+                    <div class="link-right"><a href="https://arabcomputers.com.sa/terms-and-conditions/">Condition</a></div>
                 </div>
             </div>
         </div>
@@ -462,10 +474,10 @@
             <h2>Support and Sales</h2>
             <div class="contact-info">
                 <p><strong>For Maintenance:</strong></p>
-                <p><a href="#">Visit AC-Care</a></p>
+                <p><a href="https://ac-care.com.sa/">Visit AC-Care</a></p>
                 
                 <p><strong>For Individual Sales:</strong></p>
-                <p><a href="#">Point of Sales</a></p>
+                <p><a href="https://arabcomputers.com.sa/point-of-sales/">Point of Sales</a></p>
                 
                 <p><strong>For corporate or channels sales:</strong></p>
                 <p><a href="mailto:sales@arabcomputers.com.sa">sales@arabcomputers.com.sa</a></p>
@@ -474,12 +486,31 @@
     </div>
 
     <script>
-        function validateForm(event) {
-            event.preventDefault();
-            const button = event.target;
-            const allowedCodes = ["2KKDX1RNX0","3ANMH9TBMT", 
-"9KM8W29CZR",
-"70JWY71Q4A",
+        // دالة تجزئة سريعة وفعالة
+        function simpleHash(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash; // تحويل إلى عدد صحيح 32 بت
+            }
+            return Math.abs(hash).toString(16);
+        }
+
+        // قاعدة بيانات الرموز باستخدام التجزئة
+        const codeDatabase = {};
+
+        // تحميل الرموز على دفعات
+        async function loadCodesInBatches() {
+            console.log("بدء تحميل الرموز...");
+
+            
+            // تقسيم الرموز إلى دفعات (يمكنك إضافة المزيد من الرموز هنا)
+            const batches = [
+                // الدفعة 1 - الرموز الأصلية من الكود
+ ["U72S7HDZ719","1TEHZ9945D9",
+"2RVSX23KEV",
+"0RKIX83FZH", 
 "8NIOQ48MSA",
 "5EZ8N633LP",
 "3QFD18EA78" ];
