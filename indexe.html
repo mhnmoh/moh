@@ -1,461 +1,987 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>التحقق من صحة ملصق الضمان</title>
-    <!-- Font Awesome للآيقونات -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Font Awesome 6 (مجاني) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <!-- مكتبة QR Scanner -->
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js">
+    </script>
     <style>
+        /* ===== إعادة ضبط عام ===== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
+
         body {
-            background: #f4f6f9;
+            font-family: 'Tajawal', 'Segoe UI', system-ui, sans-serif;
+            background: #f0f4f8;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
             padding: 20px;
             margin: 0;
         }
+
+        /* ===== الحاوية الرئيسية ===== */
         .container {
+            max-width: 460px;
+            width: 100%;
             background: #ffffff;
             border-radius: 28px;
-            padding: 30px 25px 40px;
-            max-width: 480px;
-            width: 100%;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 20, 50, 0.12);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* ===== الرأس ===== */
+        .header {
+            background: linear-gradient(135deg, #0b1e3a 0%, #1a3a5c 100%);
+            padding: 30px 24px 24px;
+            color: #fff;
             position: relative;
         }
-        h1 {
-            font-size: 26px;
-            font-weight: 700;
-            color: #1a2b4a;
-            margin-bottom: 12px;
-            line-height: 1.3;
-        }
-        .sub-text {
-            font-size: 16px;
-            color: #4a5a72;
-            margin-bottom: 25px;
-            line-height: 1.6;
-        }
-        .section-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #1a2b4a;
-            margin-top: 10px;
-            margin-bottom: 4px;
-        }
-        .hologram-tag {
-            display: inline-block;
-            background: #eef2f7;
-            padding: 6px 18px;
-            border-radius: 20px;
-            font-size: 14px;
-            color: #2c3e5a;
-            margin-bottom: 20px;
-        }
-        .input-group {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: #f0f3f8;
-            border-radius: 50px;
-            padding: 4px 4px 4px 20px;
-            margin: 15px 0 10px;
-            border: 1px solid #dce1ea;
-            transition: 0.2s;
-        }
-        .input-group:focus-within {
-            border-color: #2b7be4;
-            box-shadow: 0 0 0 3px rgba(43, 123, 228, 0.15);
-        }
-        .input-group input {
-            border: none;
-            background: transparent;
-            flex: 1;
-            padding: 14px 0;
-            font-size: 18px;
-            color: #1a2b4a;
-            outline: none;
-            direction: ltr;
-            text-align: left;
-            min-width: 0;
-        }
-        .input-group input::placeholder {
-            color: #9aaec9;
-            font-size: 15px;
-            direction: rtl;
-        }
-        .input-group .check-btn {
-            background: #2b7be4;
-            border: none;
-            color: #fff;
-            font-size: 18px;
-            font-weight: 600;
-            padding: 12px 28px;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: 0.2s;
-            white-space: nowrap;
-        }
-        .input-group .check-btn:hover {
-            background: #1a5fc7;
-        }
-        .input-group .check-btn:active {
-            transform: scale(0.96);
-        }
 
-        .camera-wrapper {
-            display: flex;
-            justify-content: center;
-            margin: 20px 0 5px;
-        }
-        .camera-btn {
-            background: #2b7be4;
-            border: none;
-            color: #fff;
-            font-size: 22px;
-            padding: 14px 30px;
-            border-radius: 60px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            transition: 0.2s;
-            box-shadow: 0 4px 12px rgba(43, 123, 228, 0.3);
-        }
-        .camera-btn i {
-            font-size: 26px;
-        }
-        .camera-btn:hover {
-            background: #1a5fc7;
-            box-shadow: 0 6px 16px rgba(43, 123, 228, 0.4);
-        }
-        .camera-btn:active {
-            transform: scale(0.95);
-        }
-
-        .error-msg {
-            color: #d32f2f;
-            font-size: 16px;
-            margin-top: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        .error-msg i {
-            font-size: 20px;
-        }
-        .fake-result {
-            margin-top: 15px;
-            font-size: 15px;
-            color: #6a7b94;
-        }
-
-        /* ----- مودال الكاميرا ----- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(3px);
-            display: none; /* مخفي افتراضياً */
-            align-items: center;
-            justify-content: center;
-            z-index: 999;
-            padding: 20px;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #f9b042, #f5a623, #f9b042);
+            background-size: 200% 100%;
+            animation: shimmer 2.5s ease-in-out infinite;
         }
-        .modal-overlay.active {
-            display: flex;
+
+        @keyframes shimmer {
+            0%,
+            100% {
+                background-position: 0% 0%;
+            }
+            50% {
+                background-position: 100% 0%;
+            }
         }
-        .modal-box {
-            background: #fff;
-            border-radius: 32px;
-            max-width: 420px;
-            width: 100%;
-            padding: 30px 25px 35px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            text-align: center;
-            animation: fadeIn 0.25s ease;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .modal-box h2 {
+
+        .header h1 {
             font-size: 22px;
-            color: #1a2b4a;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header h1 i {
+            font-size: 26px;
+            color: #f9b042;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.85;
+            margin-top: 8px;
+            line-height: 1.6;
+            font-weight: 300;
+            padding-right: 4px;
+        }
+
+        /* ===== المحتوى ===== */
+        .content {
+            padding: 22px 24px 28px;
+        }
+
+        /* ===== تسمية الرقم التسلسلي ===== */
+        .serial-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #1a2a4a;
             margin-bottom: 10px;
         }
-        .modal-box .modal-sub {
-            color: #4a5a72;
-            font-size: 16px;
-            margin-bottom: 25px;
+
+        .serial-label .hologram-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(145deg, #e8edf5, #d0d9e8);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            font-size: 18px;
+            color: #1a3a5c;
+            box-shadow: inset 0 -2px 6px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(26, 58, 92, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.6);
         }
-        .modal-option {
-            background: #f0f3f8;
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 18px;
+
+        .serial-label .hologram-sticker {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #f6f9ff, #e4ecf9);
+            padding: 4px 14px 4px 18px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #1a3a5c;
+            border: 1px solid rgba(26, 58, 92, 0.12);
+            letter-spacing: 0.5px;
+        }
+
+        .serial-label .hologram-sticker i {
+            font-size: 16px;
+            color: #f9b042;
+        }
+
+        /* ===== حقل الإدخال + زر الكاميرا ===== */
+        .input-wrapper {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            font-size: 16px;
-            color: #1a2b4a;
+            gap: 10px;
+            margin-bottom: 14px;
+            background: #f7faff;
+            border-radius: 16px;
+            border: 2px solid #e2e9f2;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            padding: 2px 2px 2px 12px;
         }
-        .modal-option span {
-            font-weight: 500;
+
+        .input-wrapper:focus-within {
+            border-color: #1a3a5c;
+            box-shadow: 0 0 0 4px rgba(26, 58, 92, 0.08);
         }
-        .modal-option .badge {
-            background: #dce1ea;
-            padding: 4px 14px;
-            border-radius: 30px;
-            font-size: 14px;
-        }
-        .camera-select-group {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            margin: 18px 0 25px;
-        }
-        .camera-select-group button {
-            background: #eef2f7;
-            border: 2px solid transparent;
-            border-radius: 30px;
-            padding: 10px 22px;
-            font-size: 16px;
-            color: #1a2b4a;
-            cursor: pointer;
-            transition: 0.2s;
+
+        .input-wrapper input {
             flex: 1;
-            font-weight: 500;
-        }
-        .camera-select-group button.active {
-            border-color: #2b7be4;
-            background: #e1ebfa;
-        }
-        .camera-select-group button:hover {
-            background: #dce3ef;
-        }
-        .modal-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-top: 10px;
-        }
-        .modal-actions .btn-primary {
-            background: #2b7be4;
             border: none;
+            outline: none;
+            padding: 14px 6px;
+            font-size: 16px;
+            font-family: inherit;
+            background: transparent;
+            color: #1a2a4a;
+            min-width: 0;
+        }
+
+        .input-wrapper input::placeholder {
+            color: #a0b3cc;
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        .input-wrapper .btn-camera {
+            flex-shrink: 0;
+            width: 52px;
+            height: 52px;
+            border: none;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #1a3a5c, #0b1e3a);
             color: #fff;
-            font-size: 18px;
-            font-weight: 600;
-            padding: 14px;
-            border-radius: 60px;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
-            transition: 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 12px rgba(26, 58, 92, 0.25);
+        }
+
+        .input-wrapper .btn-camera:hover {
+            transform: scale(1.04);
+            box-shadow: 0 6px 20px rgba(26, 58, 92, 0.35);
+        }
+
+        .input-wrapper .btn-camera:active {
+            transform: scale(0.94);
+        }
+
+        .input-wrapper .btn-camera i {
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+
+        /* ===== صف زر الفحص + مربع التحقق ===== */
+        .action-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        /* ===== زر الفحص ===== */
+        .btn-check {
+            flex: 1;
+            min-width: 120px;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 16px;
+            font-size: 17px;
+            font-weight: 700;
+            font-family: inherit;
+            background: linear-gradient(135deg, #f9b042, #f5a623);
+            color: #0b1e3a;
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-        }
-        .modal-actions .btn-primary:hover {
-            background: #1a5fc7;
-        }
-        .modal-actions .btn-secondary {
-            background: transparent;
-            border: none;
-            color: #6a7b94;
-            font-size: 16px;
-            cursor: pointer;
-            padding: 8px;
-        }
-        .modal-actions .btn-secondary:hover {
-            color: #1a2b4a;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 16px rgba(245, 166, 35, 0.35);
+            letter-spacing: 0.3px;
         }
 
-        /* تنسيق الأرقام الوهمية في الصور */
-        .dummy-code {
-            font-size: 20px;
-            font-weight: 600;
-            color: #1a2b4a;
-            letter-spacing: 2px;
-            background: #f0f3f8;
-            padding: 6px 16px;
-            border-radius: 30px;
-            display: inline-block;
-            margin: 6px 0;
+        .btn-check:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(245, 166, 35, 0.45);
         }
-        .flex-row {
+
+        .btn-check:active {
+            transform: scale(0.96);
+        }
+
+        .btn-check i {
+            font-size: 18px;
+        }
+
+        /* ===== مربع التحقق (checkbox) ===== */
+        .verify-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #1a2a4a;
+            font-weight: 500;
+            cursor: pointer;
+            user-select: none;
+            padding: 6px 10px 6px 6px;
+            border-radius: 12px;
+            background: #f7faff;
+            border: 1px solid #e2e9f2;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .verify-checkbox:hover {
+            background: #eef4fc;
+            border-color: #c8d4e4;
+        }
+
+        .verify-checkbox input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            border: 2px solid #c8d4e4;
+            background: #fff;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .verify-checkbox input[type="checkbox"]:checked {
+            background: #1a3a5c;
+            border-color: #1a3a5c;
+        }
+
+        .verify-checkbox input[type="checkbox"]:checked::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            font-size: 13px;
+            color: #fff;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .verify-checkbox input[type="checkbox"]:focus-visible {
+            outline: 2px solid #f9b042;
+            outline-offset: 2px;
+        }
+
+        .verify-checkbox .check-label {
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        /* ===== نتيجة التحقق ===== */
+        .result-box {
+            background: #f8faff;
+            border-radius: 16px;
+            padding: 16px 18px;
+            margin-bottom: 18px;
+            border: 1px solid #e8eef6;
+            min-height: 58px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transition: all 0.3s;
+        }
+
+        .result-box .result-icon {
+            font-size: 28px;
+            flex-shrink: 0;
+            width: 40px;
+            text-align: center;
+        }
+
+        .result-box .result-icon.error {
+            color: #e74c3c;
+        }
+
+        .result-box .result-icon.success {
+            color: #27ae60;
+        }
+
+        .result-box .result-icon.waiting {
+            color: #a0b3cc;
+        }
+
+        .result-box .result-text {
+            font-size: 15px;
+            color: #1a2a4a;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        .result-box .result-text .highlight-code {
+            font-weight: 700;
+            color: #0b1e3a;
+            background: #e8eef6;
+            padding: 2px 10px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 0.5px;
+        }
+
+        .result-box .result-text .error-text {
+            color: #e74c3c;
+        }
+
+        .result-box .result-text .success-text {
+            color: #27ae60;
+        }
+
+        /* ===== تحذير ===== */
+        .warning {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: #fef8ec;
+            border-radius: 14px;
+            padding: 14px 16px;
+            border-right: 4px solid #f5a623;
+            font-size: 13px;
+            color: #7a6a3a;
+            line-height: 1.6;
+        }
+
+        .warning i {
+            font-size: 18px;
+            color: #f5a623;
+            margin-top: 1px;
+            flex-shrink: 0;
+        }
+
+        .warning strong {
+            color: #5a4a2a;
+        }
+
+        /* ===== مودال الماسح الضوئي ===== */
+        .scanner-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            animation: fadeIn 0.25s ease;
+        }
+
+        .scanner-modal.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .scanner-modal .modal-box {
+            background: #fff;
+            border-radius: 28px;
+            max-width: 440px;
+            width: 100%;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+        }
+
+        .scanner-modal .modal-header {
+            background: #0b1e3a;
+            padding: 18px 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #fff;
+        }
+
+        .scanner-modal .modal-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .scanner-modal .modal-header h3 i {
+            color: #f9b042;
+        }
+
+        .scanner-modal .modal-header .btn-close-modal {
+            background: rgba(255, 255, 255, 0.12);
+            border: none;
+            color: #fff;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            transition: background 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            flex-wrap: wrap;
         }
 
-        /* مسؤولية */
+        .scanner-modal .modal-header .btn-close-modal:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .scanner-modal .modal-body {
+            padding: 20px 20px 24px;
+        }
+
+        .scanner-modal #qr-reader {
+            width: 100%;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #0b1e3a;
+            min-height: 280px;
+            position: relative;
+        }
+
+        .scanner-modal #qr-reader video {
+            border-radius: 16px;
+            width: 100% !important;
+            height: auto !important;
+        }
+
+        .scanner-modal #qr-reader img {
+            display: none !important;
+        }
+
+        .scanner-modal .scanner-status {
+            text-align: center;
+            margin-top: 14px;
+            font-size: 14px;
+            color: #4a6a8a;
+            font-weight: 500;
+        }
+
+        .scanner-modal .scanner-status i {
+            color: #f9b042;
+            margin-left: 6px;
+        }
+
+        /* ===== تنسيق رسالة html5-qrcode ===== */
+        #qr-reader__scan_region {
+            background: #0b1e3a !important;
+            border-radius: 16px !important;
+            min-height: 260px !important;
+        }
+
+        #qr-reader__scan_region video {
+            border-radius: 16px !important;
+        }
+
+        #qr-reader__dashboard_section_csr {
+            display: none !important;
+        }
+
+        /* ===== استجابة ===== */
         @media (max-width: 480px) {
-            .container { padding: 20px 15px; }
-            h1 { font-size: 22px; }
-            .input-group { flex-wrap: wrap; background: transparent; padding: 0; border: none; }
-            .input-group input { background: #f0f3f8; border-radius: 50px; padding: 14px 20px; margin-bottom: 10px; width: 100%; border: 1px solid #dce1ea; }
-            .input-group .check-btn { width: 100%; justify-content: center; }
-            .camera-btn { width: 100%; justify-content: center; }
-            .modal-box { padding: 25px 18px; }
+            .container {
+                border-radius: 20px;
+            }
+            .header {
+                padding: 22px 18px 18px;
+            }
+            .header h1 {
+                font-size: 19px;
+            }
+            .content {
+                padding: 18px 18px 22px;
+            }
+            .input-wrapper {
+                padding: 2px 2px 2px 8px;
+            }
+            .input-wrapper input {
+                padding: 12px 4px;
+                font-size: 15px;
+            }
+            .input-wrapper .btn-camera {
+                width: 46px;
+                height: 46px;
+                font-size: 19px;
+                border-radius: 12px;
+            }
+            .btn-check {
+                font-size: 15px;
+                padding: 12px 16px;
+                min-width: 90px;
+            }
+            .action-row {
+                gap: 10px;
+            }
+            .verify-checkbox {
+                padding: 4px 8px 4px 4px;
+                font-size: 13px;
+            }
+            .verify-checkbox .check-label {
+                font-size: 12px;
+            }
+            .result-box {
+                padding: 14px 14px;
+                font-size: 14px;
+                gap: 10px;
+            }
+            .result-box .result-icon {
+                font-size: 24px;
+                width: 34px;
+            }
+            .warning {
+                font-size: 12px;
+                padding: 12px 14px;
+            }
+            .scanner-modal .modal-box {
+                border-radius: 20px;
+            }
+            .scanner-modal .modal-header {
+                padding: 14px 18px;
+            }
+            .scanner-modal .modal-header h3 {
+                font-size: 16px;
+            }
+            .scanner-modal .modal-body {
+                padding: 14px 14px 18px;
+            }
+            .scanner-modal #qr-reader {
+                min-height: 220px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .action-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .verify-checkbox {
+                justify-content: center;
+                padding: 10px;
+            }
+            .btn-check {
+                min-width: unset;
+            }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>التحقق من صحة ملصق الضمان</h1>
-    <p class="sub-text">
-        تحقق مما إذا كان ملصق الضمان الموجود على منتجك أصليًا.<br>
-        تأكد مما إذا كان الضمان موجودًا على منتجك هو ملصق أصلي أو مزيج
-    </p>
-
-    <div class="section-title">الرمز التسلسلي</div>
-    <div class="hologram-tag">ملصق هولوغرام</div>
-
-    <div style="text-align: right; margin-top: 5px; font-weight: 500; color: #1a2b4a;">
-        أدخل الرقم الظاهر على الملصق في هذا المربع:
-    </div>
-    <div style="font-size: 15px; color: #6a7b94; margin-bottom: 8px;">
-        أدخل الرقم الموجود على الملصق هنا
-    </div>
-
-    <!-- حقل الإدخال وزر التحقق -->
-    <div class="input-group">
-        <input type="text" id="serialInput" placeholder="7566546654" value="7566546654">
-        <button class="check-btn" id="checkBtn">يفحص</button>
-    </div>
-
-    <!-- نتيجة وهمية (كما في الصورة) -->
-    <div class="error-msg" id="resultMsg">
-        <i class="fas fa-times-circle"></i>
-        <span>لم يتم العثور على الكود <strong>X</strong> هذا الرمز غير موجود</span>
-    </div>
-    <div class="fake-result">
-        نحذر من الربح من الكرام من وجود ضمان مزور في رمز إستجابة سريعة يوجه المستخدمين صفحة إلكترونية مزورة تشبه هذه الصفحة.
-    </div>
-
-    <!-- زر الكاميرا -->
-    <div class="camera-wrapper">
-        <button class="camera-btn" id="cameraBtn">
-            <i class="fas fa-camera"></i> مسح بالكاميرا
-        </button>
-    </div>
-</div>
-
-<!-- ===== مودال الكاميرا ===== -->
-<div class="modal-overlay" id="cameraModal">
-    <div class="modal-box">
-        <h2>طلب إذن استخدام الكاميرا</h2>
-        <p class="modal-sub">مسح ملف صورة ضوئيًا</p>
-
-        <!-- خيار مسح الصورة -->
-        <div class="modal-option">
-            <span><i class="fas fa-image" style="margin-left: 10px;"></i> مسح ملف صورة ضوئيًا</span>
-            <span class="badge">اختياري</span>
+    <!-- ===== الحاوية الرئيسية ===== -->
+    <div class="container" id="appContainer">
+        <!-- الرأس -->
+        <div class="header">
+            <h1>
+                <i class="fas fa-shield-alt"></i>
+                التحقق من صحة ملصق الضمان
+            </h1>
+            <p>
+                تحقق مما إذا كان ملصق الضمان الموجود على منتج أصليًا.
+                تأكد مما إذا كان الضمان موجوداً على منتج هو ملصق أصلي أو مزيج.
+            </p>
         </div>
 
-        <!-- اختيار الكاميرا (أمامية / خلفية) كما في الصورة -->
-        <div style="font-size: 16px; font-weight: 500; color: #1a2b4a; margin-bottom: 6px;">
-            اختر الكاميرا (5)
-        </div>
-        <div class="camera-select-group">
-            <button class="active" id="frontCam">الكاميرا 1، مواجهة للأمام</button>
-            <button id="backCam">الكاميرا 2، خلفية</button>
-        </div>
+        <!-- المحتوى -->
+        <div class="content">
+            <!-- تسمية الرقم التسلسلي -->
+            <div class="serial-label">
+                <span class="hologram-icon">
+                    <i class="fas fa-fingerprint"></i>
+                </span>
+                <span>الرمز التسلسلي</span>
+                <span class="hologram-sticker">
+                    <i class="fas fa-star"></i>
+                    ملصق هولوغرام
+                </span>
+            </div>
 
-        <!-- أزرار الإجراء -->
-        <div class="modal-actions">
-            <button class="btn-primary" id="startScanBtn">
-                <i class="fas fa-play"></i> ابدأ المسح
-            </button>
-            <button class="btn-secondary" id="closeModalBtn">إلغاء</button>
+            <!-- حقل الإدخال + زر الكاميرا -->
+            <div class="input-wrapper">
+                <input
+                type="text"
+                id="codeInput"
+                placeholder="ادخل الرقم الموجود على الملصق هنا"
+                autocomplete="off"
+                dir="ltr"
+                />
+                <button class="btn-camera" id="cameraBtn" aria-label="مسح رمز الاستجابة السريعة" title="مسح رمز الاستجابة السريعة">
+                    <i class="fas fa-camera"></i>
+                </button>
+            </div>
+
+            <!-- صف الإجراءات: زر الفحص + مربع التحقق -->
+            <div class="action-row">
+                <button class="btn-check" id="checkBtn">
+                    <i class="fas fa-search"></i>
+                    فحص
+                </button>
+
+                <label class="verify-checkbox" id="verifyCheckboxLabel">
+                    <input type="checkbox" id="verifyCheckbox" />
+                    <span class="check-label">
+                        <i class="fas fa-check-circle" style="color:#27ae60;font-size:13px;"></i>
+                        تأكيد
+                    </span>
+                </label>
+            </div>
+
+            <!-- مربع نتيجة التحقق -->
+            <div class="result-box" id="resultBox">
+                <div class="result-icon waiting" id="resultIcon">
+                    <i class="fas fa-info-circle"></i>
+                </div>
+                <div class="result-text" id="resultText">
+                    انتظر إدخال الرقم أو المسح
+                </div>
+            </div>
+
+            <!-- تحذير -->
+            <div class="warning">
+                <i class="fas fa-triangle-exclamation"></i>
+                <div>
+                    <strong>نحذر من الربح من الكرام:</strong>
+                    وجود ضمان مزور في رمز استجابة سريعة يوجه المستخدمين
+                    صفحة إلكترونية مزورة تشبه هذه الصفحة.
+                </div>
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-    (function() {
-        const cameraBtn = document.getElementById('cameraBtn');
-        const modal = document.getElementById('cameraModal');
-        const closeModalBtn = document.getElementById('closeModalBtn');
-        const startScanBtn = document.getElementById('startScanBtn');
-        const frontCam = document.getElementById('frontCam');
-        const backCam = document.getElementById('backCam');
-        const checkBtn = document.getElementById('checkBtn');
-        const serialInput = document.getElementById('serialInput');
-        const resultMsg = document.getElementById('resultMsg');
+    <!-- ===== مودال الماسح الضوئي ===== -->
+    <div class="scanner-modal" id="scannerModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>
+                    <i class="fas fa-qrcode"></i>
+                    مسح رمز الاستجابة السريعة
+                </h3>
+                <button class="btn-close-modal" id="closeScannerBtn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="qr-reader"></div>
+                <div class="scanner-status">
+                    <i class="fas fa-camera-rotate"></i>
+                    وجّه الكاميرا نحو رمز الاستجابة السريعة
+                </div>
+            </div>
+        </div>
+    </div>
 
-        // فتح المودال
-        cameraBtn.addEventListener('click', function() {
-            modal.classList.add('active');
-        });
+    <!-- ===== JavaScript ===== -->
+    <script>
+        (function() {
+            'use strict';
 
-        // إغلاق المودال (زر إلغاء)
-        closeModalBtn.addEventListener('click', function() {
-            modal.classList.remove('active');
-        });
+            // ---- عناصر DOM ----
+            const codeInput = document.getElementById('codeInput');
+            const cameraBtn = document.getElementById('cameraBtn');
+            const checkBtn = document.getElementById('checkBtn');
+            const verifyCheckbox = document.getElementById('verifyCheckbox');
+            const resultBox = document.getElementById('resultBox');
+            const resultIcon = document.getElementById('resultIcon');
+            const resultText = document.getElementById('resultText');
+            const scannerModal = document.getElementById('scannerModal');
+            const closeScannerBtn = document.getElementById('closeScannerBtn');
 
-        // إغلاق المودال عند النقر خارج المحتوى
-        modal.addEventListener('click', function(e) {
-            if (e.target === modal) {
-                modal.classList.remove('active');
+            // ---- حالة ----
+            let html5QrCode = null;
+            let isScanning = false;
+
+            // ---- قاعدة بيانات أكواد وهمية (للمثال) ----
+            const VALID_CODES = [
+                '7566546654',
+                '1234567890',
+                '9876543210',
+                '1112223334',
+                '5556667778',
+                '9998887776'
+            ];
+
+            // ---- دالة عرض النتيجة ----
+            function setResult(success, code, message) {
+                // إزالة جميع الكلاسات
+                resultIcon.className = 'result-icon';
+
+                if (success) {
+                    resultIcon.classList.add('success');
+                    resultIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
+                    resultText.innerHTML = `
+                                <span class="success-text">✓ تم التحقق بنجاح</span><br />
+                                <span>الكود <span class="highlight-code">${code}</span> صحيح</span>
+                                ${message ? `<br /><span style="font-size:13px;color:#4a6a8a;">${message}</span>` : ''}
+                            `;
+                    resultBox.style.borderColor = '#27ae60';
+                    resultBox.style.background = '#f0faf4';
+                } else {
+                    resultIcon.classList.add('error');
+                    resultIcon.innerHTML = '<i class="fas fa-times-circle"></i>';
+                    resultText.innerHTML = `
+                                <span class="error-text">✗ لم يتم العثور على الكود</span><br />
+                                <span>هذا الرمز <span class="highlight-code">${code || 'غير معروف'}</span> غير موجود</span>
+                                ${message ? `<br /><span style="font-size:13px;color:#a04040;">${message}</span>` : ''}
+                            `;
+                    resultBox.style.borderColor = '#e74c3c';
+                    resultBox.style.background = '#fdf0f0';
+                }
             }
-        });
 
-        // تبديل اختيار الكاميرا (أمامي / خلفي)
-        frontCam.addEventListener('click', function() {
-            frontCam.classList.add('active');
-            backCam.classList.remove('active');
-        });
-        backCam.addEventListener('click', function() {
-            backCam.classList.add('active');
-            frontCam.classList.remove('active');
-        });
-
-        // زر "ابدأ المسح" - محاكاة
-        startScanBtn.addEventListener('click', function() {
-            alert('تم بدء المسح (محاكاة)');
-            // في التطبيق الحقيقي، هنا يتم استدعاء واجهة الكاميرا
-            modal.classList.remove('active');
-        });
-
-        // زر "يفحص" - محاكاة النتيجة
-        checkBtn.addEventListener('click', function() {
-            const code = serialInput.value.trim();
-            if (code === '') {
-                resultMsg.innerHTML = `<i class="fas fa-exclamation-circle"></i> <span>الرجاء إدخال الرقم</span>`;
-                return;
+            // ---- دالة إعادة تعيين النتيجة إلى حالة الانتظار ----
+            function resetResult() {
+                resultIcon.className = 'result-icon waiting';
+                resultIcon.innerHTML = '<i class="fas fa-info-circle"></i>';
+                resultText.textContent = 'انتظر إدخال الرقم أو المسح';
+                resultBox.style.borderColor = '#e8eef6';
+                resultBox.style.background = '#f8faff';
             }
-            // محاكاة عدم وجود الكود (كما في الصورة)
-            resultMsg.innerHTML = `<i class="fas fa-times-circle"></i> <span>لم يتم العثور على الكود <strong>X</strong> هذا الرمز غير موجود</span>`;
-        });
 
-        // عند الضغط Enter في حقل الإدخال
-        serialInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                checkBtn.click();
+            // ---- دالة التحقق من الكود ----
+            function verifyCode(code) {
+                if (!code || code.trim() === '') {
+                    setResult(false, '', 'الرجاء إدخال رمز أولاً');
+                    return false;
+                }
+
+                const trimmed = code.trim();
+                const isValid = VALID_CODES.includes(trimmed);
+
+                if (isValid) {
+                    setResult(true, trimmed, 'الضمان أصلي 100%');
+                } else {
+                    setResult(false, trimmed, 'تأكد من الرقم وحاول مجدداً');
+                }
+
+                return isValid;
             }
-        });
 
-        // (اختياري) تغيير النص في المودال ليتطابق مع الصور تماماً
-        // تم بالفعل تضمين النصوص المطلوبة
-    })();
-</script>
+            // ---- معالج زر الفحص ----
+            checkBtn.addEventListener('click', function() {
+                const code = codeInput.value.trim();
+                verifyCode(code);
+            });
+
+            // ---- معالج الضغط على Enter في حقل الإدخال ----
+            codeInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    checkBtn.click();
+                }
+            });
+
+            // ---- عند تغيير النص، إعادة تعيين النتيجة (اختياري) ----
+            codeInput.addEventListener('input', function() {
+                // إذا كان الحقل فارغاً، أعد تعيين النتيجة
+                if (this.value.trim() === '') {
+                    resetResult();
+                }
+            });
+
+            // ---- فتح الماسح الضوئي ----
+            cameraBtn.addEventListener('click', function() {
+                openScanner();
+            });
+
+            // ---- إغلاق الماسح ----
+            closeScannerBtn.addEventListener('click', function() {
+                closeScanner();
+            });
+
+            // ---- إغلاق الماسح بالضغط خارج المحتوى ----
+            scannerModal.addEventListener('click', function(e) {
+                if (e.target === scannerModal) {
+                    closeScanner();
+                }
+            });
+
+            // ---- دالة فتح الماسح ----
+            function openScanner() {
+                if (isScanning) return;
+
+                scannerModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+
+                // تأخير بسيط لضمان ظهور المودال قبل بدء الكاميرا
+                setTimeout(() => {
+                    startQrScanner();
+                }, 300);
+            }
+
+            // ---- دالة إغلاق الماسح ----
+            function closeScanner() {
+                if (html5QrCode) {
+                    try {
+                        html5QrCode.stop().then(() => {
+                            console.log('Scanner stopped');
+                        }).catch(err => {
+                            console.warn('Stop error:', err);
+                        });
+                    } catch (e) {
+                        console.warn('Stop exception:', e);
+                    }
+                }
+                scannerModal.classList.remove('active');
+                document.body.style.overflow = '';
+                isScanning = false;
+            }
+
+            // ---- بدء الماسح الضوئي ----
+            function startQrScanner() {
+                const readerElement = document.getElementById('qr-reader');
+                // تنظيف أي محتوى سابق
+                readerElement.innerHTML = '';
+
+                if (typeof Html5Qrcode === 'undefined') {
+                    readerElement.innerHTML =
+                        '<p style="color:#fff;padding:30px;text-align:center;">⚠️ المكتبة غير محملة، تأكد من الاتصال بالإنترنت.</p>';
+                    return;
+                }
+
+                try {
+                    html5QrCode = new Html5Qrcode('qr-reader');
+
+                    const config = {
+                        fps: 15,
+                        qrbox: { width: 240, height: 240 },
+                        aspectRatio: 1.0,
+                    };
+
+                    html5QrCode.start({ facingMode: 'environment' },
+                        config,
+                        // onSuccess
+                        (decodedText, decodedResult) => {
+                            // نجاح المسح
+                            console.log('QR scanned:', decodedText);
+
+                            // وضع النتيجة في الحقل
+                            codeInput.value = decodedText;
+
+                            // التحقق تلقائياً
+                            verifyCode(decodedText);
+
+                            // إغلاق الماسح بعد نجاح المسح
+                            closeScanner();
+
+                            // إعادة تعيين حالة الماسح
+                            isScanning = false;
+                        },
+                        // onError
+                        (errorMessage) => {
+                            // أخطاء المسح المستمرة (لا نعرضها للمستخدم)
+                            // console.debug('Scan error:', errorMessage);
+                        }
+                    ).then(() => {
+                        isScanning = true;
+                        console.log('Scanner started successfully');
+                    }).catch((err) => {
+                        console.error('Start error:', err);
+                        readerElement.innerHTML =
+                            `<p style="color:#ffcccb;padding:30px;text-align:center;">
+                                        <i class="fas fa-exclamation-triangle" style="font-size:28px;display:block;margin-bottom:12px;"></i>
+                                        تعذر الوصول إلى الكاميرا.<br />
+                                        <span style="font-size:13px;opacity:0.8;">${err.message || 'يرجى منح صلاحيات الكاميرا'}</span>
+                                    </p>`;
+                        isScanning = false;
+                    });
+                } catch (e) {
+                    console.error('Scanner init error:', e);
+                    readerElement.innerHTML =
+                        `<p style="color:#ffcccb;padding:30px;text-align:center;">
+                                    <i class="fas fa-exclamation-triangle" style="font-size:28px;display:block;margin-bottom:12px;"></i>
+                                    حدث خطأ في تشغيل الكاميرا.<br />
+                                    <span style="font-size:13px;opacity:0.8;">${e.message || ''}</span>
+                                </p>`;
+                    isScanning = false;
+                }
+            }
+
+            // ---- معالج تغيير مربع التحقق ----
+            verifyCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    // عند التأكيد، نتحقق من الكود الحالي إن وجد
+                    const code = codeInput.value.trim();
+                    if (code) {
+                        verifyCode(code);
+                    } else {
+                        // مجرد تأكيد بدون كود
+                        resultIcon.className = 'result-icon waiting';
+                        resultIcon.innerHTML = '<i class="fas fa-check-circle" style="color:#f9b042;"></i>';
+                        resultText.textContent = '✓ تم التأكيد، انتظر إدخال الرقم';
+                        resultBox.style.borderColor = '#f9b042';
+                        resultBox.style.background = '#fef8ec';
+                    }
+                } else {
+                    // إلغاء التأكيد
+                    if (codeInput.value.trim() === '') {
+                        resetResult();
+                    } else {
+                        // إعادة التحقق بدون تأكيد
+                        verifyCode(codeInput.value.trim());
+                    }
+                }
+            });
+
+            // ---- تحميل أولي: تعيين النتيجة الافتراضية ----
+            resetResult();
+
+            // ---- (اختياري) تعبئة مثال للاختبار ----
+            // يمكن تفعيل السطر التالي لتعبئة الكود التجريبي:
+            // codeInput.value = '7566546654';
+
+            console.log('✅ تطبيق التحقق من الضمان جاهز');
+            console.log('📌 الأكواد الصالحة (للاختبار):', VALID_CODES);
+
+        })();
+    </script>
 
 </body>
-             </html>
+    </html> 
